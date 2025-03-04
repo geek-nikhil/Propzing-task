@@ -1,10 +1,13 @@
 
 ## Installation
 git clone https://github.com/your-username/your-repo.git
+
 cd Propzing-task
+
 npm install  # or yarn install
 
 ## Run the app
+
 npm run dev  # or yarn dev
 
 # Testing User
@@ -13,18 +16,21 @@ npm run dev  # or yarn dev
 
 
 ## Folder Structure
-/src
-│── /api              # Next.js API routes
-│── /components       # Reusable React components
-│── /layout           # Layout components (e.g., Navbar, Sidebar)
-│── /pages            # Next.js pages
-│── /styles           # Global & module styles
-│── next.config.js    # Next.js configuration
-│── package.json      # Dependencies & scripts
+/src  
+│── /api              # Next.js API routes (handles CRUD operations for tasks)  
+│── /components       # Reusable React components (UI elements, buttons, etc.)  
+│── /layout           # Layout components (Navbar, Sidebar, and other shared layouts)  
+│── /pages            # Next.js pages (UI pages, including authentication if implemented)  
+│── /styles           # Global & module styles (Tailwind CSS, CSS modules, or other styles)  
+│── next.config.js    # Next.js configuration file  
+│── package.json      # Project dependencies and scripts  
+│── .env.local        # Environment variables (Supabase API keys and database URL)  
+│── README.md         # Project documentation  
 
 
 
-# This project is a Task Management API built using Next.js and Supabase. It provides a robust backend for managing tasks, allowing users to perform CRUD operations (Create, Read, Update, Delete) efficiently. The API is designed with best practices in data validation, error handling, and authentication, making it a scalable and secure solution.
+
+This project is a Task Management API built using Next.js and Supabase. It provides a robust backend for managing tasks, allowing users to perform CRUD operations (Create, Read, Update, Delete) efficiently. The API is designed with best practices in data validation, error handling, and authentication, making it a scalable and secure solution.
 # Key Features
 Supabase Integration – A fully managed PostgreSQL database for task storage.
 REST API Endpoints – Standard endpoints to create, retrieve, update, and delete tasks.
