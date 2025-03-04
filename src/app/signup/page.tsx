@@ -24,9 +24,11 @@ export default function SignUpPage() {
         throw error;
       }
 
-      // Redirect or show success message
-      console.log('Signed up successfully:', data);
-      window.location.href = '/components/login'; // Redirect to login page
+      // Show success alert
+      alert(`A verification email has been sent to ${email}. Please check your inbox.`);
+
+      // Redirect to login page
+      window.location.href = '/components/login';
     } catch (error) {
       console.error('Sign up error:', error);
       setError('Sign up failed. Please check your credentials.');
