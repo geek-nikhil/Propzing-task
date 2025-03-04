@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Installation
+git clone https://github.com/your-username/your-repo.git
+cd Propzing-task
+npm install  # or yarn install
 
-First, run the development server:
+## Run the app
+npm run dev  # or yarn dev
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# Testing User
+ email : nikhilraikwar846@gmail.com
+ password : 123456
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Folder Structure
+/src
+│── /api              # Next.js API routes
+│── /components       # Reusable React components
+│── /layout           # Layout components (e.g., Navbar, Sidebar)
+│── /pages            # Next.js pages
+│── /styles           # Global & module styles
+│── next.config.js    # Next.js configuration
+│── package.json      # Dependencies & scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+# This project is a Task Management API built using Next.js and Supabase. It provides a robust backend for managing tasks, allowing users to perform CRUD operations (Create, Read, Update, Delete) efficiently. The API is designed with best practices in data validation, error handling, and authentication, making it a scalable and secure solution.
+# Key Features
+Supabase Integration – A fully managed PostgreSQL database for task storage.
+REST API Endpoints – Standard endpoints to create, retrieve, update, and delete tasks.
+Data Validation & Error Handling – Ensuring valid inputs and meaningful responses.
+Authentication (Bonus) – Secure user authentication via Supabase.
+Filtering & Pagination (Optional) – Enhanced retrieval with query parameters.
+Deployment Ready – Easily deployable on Vercel for live usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# !! Visuals!!
+1. Adding a task
+   ![image](https://github.com/user-attachments/assets/98d78c80-8d28-433d-b013-38c2ad5c21da)
+![image](https://github.com/user-attachments/assets/0d9c1053-b3e2-4656-83af-23ffbc114f4b)
 
-## Deploy on Vercel
+2. Delete task
+ ![image](https://github.com/user-attachments/assets/12d02eaf-e7b5-4acd-bfdf-3e2656a5cdfa)
+ ![image](https://github.com/user-attachments/assets/fb525dca-3f53-4dc6-8b2d-543d5b0c1377)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Updating a task
+ ![image](https://github.com/user-attachments/assets/c9205342-5412-402f-80bf-02cf0f488cdf)
+![image](https://github.com/user-attachments/assets/ecd5cbaf-3221-45ab-9396-e7f2af56cc8f)
+![image](https://github.com/user-attachments/assets/d91c02e7-a4fb-4959-9ce6-422695029ae4)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Sign-in  & Sign-out feature with supabase
+   ![image](https://github.com/user-attachments/assets/b21c5fe8-981c-4a23-aa43-480a705716a2)
+   ![image](https://github.com/user-attachments/assets/f0f73302-d861-4b52-82fc-2ef4accc7db5)
+
+
+
+
+
+
+
