@@ -2,7 +2,7 @@ import { supabase } from '../../../../../lib/supabase'; // Adjust the relative p
 import { NextResponse } from 'next/server';
 
 // GET: Fetch a single task by ID
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const { data, error } = await supabase
       .from('tasks')
