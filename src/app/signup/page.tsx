@@ -15,7 +15,7 @@ export default function SignUpPage() {
     setError(null);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
       });
@@ -24,11 +24,9 @@ export default function SignUpPage() {
         throw error;
       }
 
-      // Show success alert
-      alert(`A verification email has been sent to ${email}. Please check your inbox.`);
-
-      // Redirect to login page
-      window.location.href = '/components/login';
+      // Redirect or show success message
+      console.log('Signed up successfully');
+      window.location.href = '/components/login'; // Redirect to login page
     } catch (error) {
       console.error('Sign up error:', error);
       setError('Sign up failed. Please check your credentials.');

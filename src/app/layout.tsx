@@ -2,7 +2,6 @@ import { AuthProvider } from '@/lib/AuthProvider';
 import './globals.css';
 import { ReactNode } from 'react';
 import Navbar from './components/navbar/page';
-import AuthRedirect from '@/lib/AuthRedirect';
 export const metadata = {
   title: 'Task Management',
   description: 'Task Management App',

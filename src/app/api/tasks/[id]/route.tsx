@@ -16,7 +16,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
   return NextResponse.json(data);
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } } , user : any) {
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
   const { id } = params;
   const { title, description, status } = await request.json();
 

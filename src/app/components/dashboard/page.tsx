@@ -4,14 +4,18 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/AuthProvider';
 import { fetchTasks, addTask, deleteTask, updateTask } from '@/lib/tasks';
 import TaskForm from '../taskform.tsx/page'; // Ensure the correct import path
-import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
+  type Task = {
+    id: number;
+    title: string;
+    description?: string; // Optional field
+  };
   const { session } = useAuth();
-  const [tasks, setTasks] = useState<any[]>([]);
-  const [showForm, setShowForm] = useState(false);
-  const [editingTask, setEditingTask] = useState<any>(null); // Track the task being edited
-  const [loading, setLoading] = useState(true);
+  const [tasks, setTasks] = useState<Task[]>([]);
+    const [showForm, setShowForm] = useState(false);
+    const [editingTask, setEditingTask] = useState<Task | null>(null);
+      const [loading, setLoading] = useState(true);
 
   
   // Fetch tasks when the component mounts or the session changes

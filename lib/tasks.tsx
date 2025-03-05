@@ -1,5 +1,4 @@
-import { title } from 'process';
-import { supabase } from './supabase';
+
 
 // Fetch all tasks for the current user
 export const fetchTasks = async (accessToken: string) => {
@@ -47,7 +46,7 @@ export const addTask = async (
 export const updateTask = async (
   accessToken: string,
   id: string,
-  updates: { title?: string; description?: string; status?: any }
+  updates: { title?: string; description?: string; status?: string }
 ) => {
     console.log(updates?.title)
   const response = await fetch(`http://localhost:3000/api/tasks/${id}`, {

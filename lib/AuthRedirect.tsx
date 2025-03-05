@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthProvider';
-import Navbar from '@/app/components/navbar/page';
 import LoginPage from '@/app/components/login/page'
 
 export default function AuthRedirect({ children }: { children: React.ReactNode }) {
