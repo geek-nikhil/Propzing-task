@@ -1,5 +1,6 @@
 import { supabase } from '../../../../../lib/supabase'; // Adjust the relative path
 import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
 // GET: Fetch a single task by ID
 export async function GET() {
@@ -24,8 +25,8 @@ export async function GET() {
 
 // PUT: Update a task by ID
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: { id: string } } // Extract `params` from the function arguments
 ) {
   const { id } = params;
 
@@ -58,7 +59,6 @@ export async function PUT(
     );
   }
 }
-
 // DELETE: Delete a task by ID
 export async function DELETE(
   request: Request,
