@@ -26,9 +26,9 @@ export async function GET() {
 // PUT: Update a task by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } } // Extract `params` from the function arguments
+  { params }: { params: Promise<{ id: string }> } // Extract `params` from the function arguments
 ) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const { title, description, status } = await request.json();
