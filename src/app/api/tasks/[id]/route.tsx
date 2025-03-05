@@ -1,47 +1,79 @@
 import { supabase } from '../../../../../lib/supabase'; // Adjust the relative path
 import { NextResponse } from 'next/server';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+// GET: Fetch a single task by ID
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   const { id } = params;
 
-  const { data, error } = await supabase
-    .from('tasks')
-    .select('*')
-    .eq('id', id)
-    .single();
-
-  if (error) {
-    return NextResponse.json({ message: 'Task not found' }, { status: 404 });
-  }
-  return NextResponse.json(data);
-}
-
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
-  const { title, description, status } = await request.json();
-
-  if (!title) {
-    return NextResponse.json({ message: 'Title is required' }, { status: 400 });
-  }
-
-  const { data, error } = await supabase
-    .from('tasks')
-    .update({ title, description, status })
-    .eq('id', id)
-    .select();
-
-  if (error) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
-  }
-  return NextResponse.json(data[0]);
-}
-
-
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
-    // Await the params object
-    const { id } = await params;
+    const { data, error } = await supabase
+      .from('tasks')
+      .select('*')
+      .eq('id', id)
+      .single();
 
+    if (error) {
+      return NextResponse.json({ message: 'Task not found' }, { status: 404 });
+    }
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error('Error fetching task:', error);
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT: Update a task by ID
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
+
+  try {
+    const { title, description, status } = await request.json();
+
+    if (!title) {
+      return NextResponse.json(
+        { message: 'Title is required' },
+        { status: 400 }
+      );
+    }
+
+    const { data, error } = await supabase
+      .from('tasks')
+      .update({ title, description, status })
+      .eq('id', id)
+      .select();
+
+    if (error) {
+      return NextResponse.json({ message: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json(data[0]);
+  } catch (error) {
+    console.error('Error updating task:', error);
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE: Delete a task by ID
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
+
+  try {
     // Extract the access token from the Authorization header
     const authHeader = request.headers.get('Authorization');
     const accessToken = authHeader?.split(' ')[1];

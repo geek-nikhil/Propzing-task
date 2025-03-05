@@ -5,19 +5,21 @@ import { useAuth } from '@/lib/AuthProvider';
 import { fetchTasks, addTask, deleteTask, updateTask } from '@/lib/tasks';
 import TaskForm from '../taskform.tsx/page'; // Ensure the correct import path
 
+// Define the Task type (can be moved to a separate `types.ts` file for reusability)
+type Task = {
+  id: number;
+  title: string;
+  description?: string; // Optional field
+  status?: string; // Optional field (if needed)
+};
+
 export default function Dashboard() {
-  type Task = {
-    id: number;
-    title: string;
-    description?: string; // Optional field
-  };
   const { session } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
-    const [showForm, setShowForm] = useState(false);
-    const [editingTask, setEditingTask] = useState<Task | null>(null);
-      const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  
   // Fetch tasks when the component mounts or the session changes
   useEffect(() => {
     if (session) {
@@ -35,24 +37,24 @@ export default function Dashboard() {
   }, [session]);
 
   // Handle adding a new task
-  const handleAddTask = async (title: string, description: string) => {
-    if (session) {
-      try {
-        const newTask = await addTask(session.access_token, title, description, 'pending');
-        setTasks([...tasks, newTask]);
-        setShowForm(false); // Hide the form after adding a task
-      } catch (error) {
-        console.error('Error adding task:', error);
-      }
+ const handleAddTask = async (title: string, description: string) => {
+  if (session) {
+    try {
+      const newTask = await addTask(session.access_token, title, description, 'pending');
+      setTasks([...tasks, newTask]);
+      setShowForm(false);
+    } catch (error) {
+      console.error('Error adding task:', error);
     }
-  };
+  }
+};
 
   // Handle deleting a task
-  const handleDeleteTask = async (taskId: string) => {
+  const handleDeleteTask = async (taskId: number) => {
     if (session) {
       try {
         await deleteTask(taskId, session.access_token);
-        setTasks(tasks.filter((task) => task.id !== taskId)); // Optimistically update the UI
+        setTasks(tasks.filter((task) => task.id !== taskId));
       } catch (error) {
         console.error('Error deleting task:', error);
       }
@@ -60,20 +62,21 @@ export default function Dashboard() {
   };
 
   // Handle updating a task
-  const handleUpdateTask = async (taskId: string, updates: { title: string; description: string }) => {
+  const handleUpdateTask = async (taskId: number, updates: { title: string; description: string }) => {
     if (session) {
       try {
-        const updatedTask = await updateTask(session.access_token,taskId,updates);
+        const updatedTask = await updateTask(session.access_token, taskId, updates);
         setTasks(tasks.map((task) => (task.id === taskId ? updatedTask : task)));
-        setEditingTask(null); // Close the popup form after updating
+        setEditingTask(null);
       } catch (error) {
         console.error('Error updating task:', error);
       }
     }
   };
 
+  // Show loading state
   if (loading) {
-    return <div className="p-4">Loading...</div>; // Show loading state
+    return <div className="p-4">Loading...</div>;
   }
 
   return (
@@ -86,6 +89,8 @@ export default function Dashboard() {
         {showForm ? 'Cancel' : 'Add Task'}
       </button>
       {showForm && <TaskForm onSubmit={handleAddTask} />}
+
+      {/* Task List */}
       <div className="space-y-4">
         {tasks.length === 0 ? (
           <p className="text-gray-600">No tasks found.</p>
@@ -118,10 +123,13 @@ export default function Dashboard() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">
             <h2 className="text-xl font-bold mb-4">Update Task</h2>
-            <TaskForm
-              onSubmit={(title, description) => handleUpdateTask(editingTask.id, { title, description })}
-              initialValues={{ title: editingTask.title, description: editingTask.description }} // Pre-fill the form
-            />
+                    <TaskForm
+          onSubmit={(title, description) => handleUpdateTask(editingTask.id, { title, description })}
+          initialValues={{
+            title: editingTask.title,
+            description: editingTask.description || '', // Provide a default value if description is undefined
+          }}
+        />
             <button
               onClick={() => setEditingTask(null)} // Close the popup
               className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
