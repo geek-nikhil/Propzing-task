@@ -62,9 +62,9 @@ export async function PUT(
 // DELETE: Delete a task by ID
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
     // Extract the access token from the Authorization header
