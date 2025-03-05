@@ -1,16 +1,16 @@
+// src/app/dashboard/page.tsx (or wherever your Dashboard lives)
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/AuthProvider';
 import { fetchTasks, addTask, deleteTask, updateTask } from '@/lib/tasks';
-import TaskForm from '../taskform/page'; // Ensure the correct import path
 
-// Define the Task type (can be moved to a separate `types.ts` file for reusability)
+// Define the Task type
 type Task = {
   id: number;
   title: string;
-  description?: string; // Optional field
-  status?: string; // Optional field (if needed)
+  description?: string;
+  status?: string;
 };
 
 export default function Dashboard() {
@@ -19,6 +19,10 @@ export default function Dashboard() {
   const [showForm, setShowForm] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
+  const [title, setTitle] = useState(''); // Form state for adding tasks
+  const [description, setDescription] = useState(''); // Form state for adding tasks
+  const [editTitle, setEditTitle] = useState(''); // Form state for editing tasks
+  const [editDescription, setEditDescription] = useState(''); // Form state for editing tasks
 
   // Fetch tasks when the component mounts or the session changes
   useEffect(() => {
@@ -37,17 +41,20 @@ export default function Dashboard() {
   }, [session]);
 
   // Handle adding a new task
- const handleAddTask = async (title: string, description: string) => {
-  if (session) {
-    try {
-      const newTask = await addTask(session.access_token, title, description, 'pending');
-      setTasks([...tasks, newTask]);
-      setShowForm(false);
-    } catch (error) {
-      console.error('Error adding task:', error);
+  const handleAddTask = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (session) {
+      try {
+        const newTask = await addTask(session.access_token, title, description, 'pending');
+        setTasks([...tasks, newTask]);
+        setShowForm(false);
+        setTitle(''); // Reset form
+        setDescription(''); // Reset form
+      } catch (error) {
+        console.error('Error adding task:', error);
+      }
     }
-  }
-};
+  };
 
   // Handle deleting a task
   const handleDeleteTask = async (taskId: number) => {
@@ -62,17 +69,31 @@ export default function Dashboard() {
   };
 
   // Handle updating a task
-  const handleUpdateTask = async (taskId: number, updates: { title: string; description: string }) => {
+  const handleUpdateTask = async (e: React.FormEvent, taskId: number) => {
+    e.preventDefault();
     if (session) {
       try {
-        const updatedTask = await updateTask(session.access_token, taskId, updates);
+        const updatedTask = await updateTask(session.access_token, taskId, {
+          title: editTitle,
+          description: editDescription,
+        });
         setTasks(tasks.map((task) => (task.id === taskId ? updatedTask : task)));
         setEditingTask(null);
+        setEditTitle(''); // Reset edit form
+        setEditDescription(''); // Reset edit form
       } catch (error) {
         console.error('Error updating task:', error);
       }
     }
   };
+
+  // Populate edit form when editingTask changes
+  useEffect(() => {
+    if (editingTask) {
+      setEditTitle(editingTask.title);
+      setEditDescription(editingTask.description || '');
+    }
+  }, [editingTask]);
 
   // Show loading state
   if (loading) {
@@ -88,7 +109,37 @@ export default function Dashboard() {
       >
         {showForm ? 'Cancel' : 'Add Task'}
       </button>
-      {showForm && <TaskForm onSubmit={handleAddTask} />}
+
+      {/* Add Task Form (Inline) */}
+      {showForm && (
+        <form onSubmit={handleAddTask} className="mb-4 p-4 border rounded-md">
+          <div className="mb-2">
+            <label className="block text-sm font-medium text-gray-700">Title:</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          <div className="mb-2">
+            <label className="block text-sm font-medium text-gray-700">Description:</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+          >
+            Add Task
+          </button>
+        </form>
+      )}
 
       {/* Task List */}
       <div className="space-y-4">
@@ -101,7 +152,7 @@ export default function Dashboard() {
               <p className="text-gray-600">{task.description}</p>
               <div className="mt-2 space-x-2">
                 <button
-                  onClick={() => setEditingTask(task)} // Open the popup form for editing
+                  onClick={() => setEditingTask(task)}
                   className="px-2 py-1 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
                 >
                   Update
@@ -118,20 +169,40 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Popup Form for Updating Tasks */}
+      {/* Update Task Form (Inline Popup) */}
       {editingTask && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">
             <h2 className="text-xl font-bold mb-4">Update Task</h2>
-                    <TaskForm
-          onSubmit={(title, description) => handleUpdateTask(editingTask.id, { title, description })}
-          initialValues={{
-            title: editingTask.title,
-            description: editingTask.description || '', // Provide a default value if description is undefined
-          }}
-        />
+            <form onSubmit={(e) => handleUpdateTask(e, editingTask.id)} className="mb-4">
+              <div className="mb-2">
+                <label className="block text-sm font-medium text-gray-700">Title:</label>
+                <input
+                  type="text"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  required
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <div className="mb-2">
+                <label className="block text-sm font-medium text-gray-700">Description:</label>
+                <textarea
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  required
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+              >
+                Update Task
+              </button>
+            </form>
             <button
-              onClick={() => setEditingTask(null)} // Close the popup
+              onClick={() => setEditingTask(null)}
               className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
             >
               Cancel
