@@ -1,3 +1,5 @@
+// src/lib/tasks.ts
+
 // Define a Task type for better type safety
 type Task = {
   id: number;
@@ -6,9 +8,12 @@ type Task = {
   status?: string;
 };
 
+// Base API URL from environment variable
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/tasks'; // Fallback for safety
+
 // Fetch all tasks for the current user
 export const fetchTasks = async (accessToken: string): Promise<Task[]> => {
-  const response = await fetch('http://localhost:3001/api/tasks', {
+  const response = await fetch(API_URL, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -31,7 +36,7 @@ export const addTask = async (
   description: string,
   status: string
 ): Promise<Task> => {
-  const response = await fetch('http://localhost:3001/api/tasks', {
+  const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -51,16 +56,16 @@ export const addTask = async (
 // Update a task
 export const updateTask = async (
   accessToken: string,
-  id: number, // Changed to `number` to match the Task type
+  id: number,
   updates: { title?: string; description?: string; status?: string }
 ): Promise<Task> => {
-  const response = await fetch(`http://localhost:3001/api/tasks/${id}`, {
+  const response = await fetch(`${API_URL}/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`,
     },
-    body: JSON.stringify(updates), // Send the updates object directly
+    body: JSON.stringify(updates),
   });
 
   if (!response.ok) {
@@ -72,11 +77,8 @@ export const updateTask = async (
 };
 
 // Delete a task
-export const deleteTask = async (
-  id: number, // Changed to `number` to match the Task type
-  accessToken: string
-): Promise<void> => {
-  const response = await fetch(`http://localhost:3001/api/tasks/${id}`, {
+export const deleteTask = async (id: number, accessToken: string): Promise<void> => {
+  const response = await fetch(`${API_URL}/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
