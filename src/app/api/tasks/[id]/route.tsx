@@ -2,26 +2,19 @@ import { supabase } from '../../../../../lib/supabase'; // Adjust the relative p
 import { NextResponse } from 'next/server';
 
 // GET: Fetch a single task by ID
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  const { id } = params;
-
+export async function GET(request: Request) {
   try {
     const { data, error } = await supabase
       .from('tasks')
-      .select('*')
-      .eq('id', id)
-      .single();
+      .select('*');
 
     if (error) {
-      return NextResponse.json({ message: 'Task not found' }, { status: 404 });
+      return NextResponse.json({ message: 'Failed to fetch tasks' }, { status: 500 });
     }
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error('Error fetching task:', error);
+    console.error('Error fetching tasks:', error);
     return NextResponse.json(
       { message: 'Internal Server Error' },
       { status: 500 }
