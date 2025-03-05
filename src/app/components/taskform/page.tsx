@@ -7,7 +7,8 @@ type TaskFormProps = {
   initialValues?: { title: string; description: string }; // Add initialValues for editing
 };
 
-export default function TaskForm({ onSubmit, initialValues }: TaskFormProps) {
+export default function TaskForm(props: TaskFormProps) {
+  const { onSubmit, initialValues } = props; // Destructure inside the function
   const [title, setTitle] = useState(initialValues?.title || '');
   const [description, setDescription] = useState(initialValues?.description || '');
 
