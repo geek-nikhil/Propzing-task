@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/AuthProvider';
 import { fetchTasks, addTask, deleteTask, updateTask } from '@/lib/tasks';
-import TaskForm from '../taskform.tsx/page'; // Ensure the correct import path
+import TaskForm from '../taskform/page'; // Ensure the correct import path
 
 // Define the Task type (can be moved to a separate `types.ts` file for reusability)
 type Task = {
